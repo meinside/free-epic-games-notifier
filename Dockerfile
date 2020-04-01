@@ -10,5 +10,5 @@ COPY /free-epic-games-notifier /
 COPY /epic_notifier.json /
 
 ENTRYPOINT ["dumb-init", "--"]
-CMD ["/free-epic-games-notifier"]
+CMD ["/free-epic-games-notifier", "-conf", "/epic_notifier.json", "-cache", "/caches/caches.db"]
 

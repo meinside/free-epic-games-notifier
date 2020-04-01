@@ -38,7 +38,7 @@ $ docker build -t MY_IMAGE_TAG .
 then run it with:
 
 ```bash
-$ docker run -t MY_IMAGE_TAG
+$ docker run -t -v free-epic-games-caches:/caches MY_IMAGE_TAG
 ```
 
 ## License

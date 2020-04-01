@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"io/ioutil"
 	"log"
 
@@ -11,8 +12,8 @@ import (
 )
 
 const (
-	confFilename  = "epic_notifier.json"
-	cacheFilename = "caches.db"
+	defaultConfigFilename = "epic_notifier.json"
+	defaultCacheFilename  = "caches.db"
 )
 
 type conf struct {
@@ -20,17 +21,24 @@ type conf struct {
 	PushbulletAccessToken string `json:"pushbullet_access_token,omitempty"`
 }
 
+var _confPath string
+var _cachePath string
+
 var _conf conf
 var _notifiers []notifier.Notifier
 
 func init() {
+	flag.StringVar(&_confPath, "conf", defaultConfigFilename, "config filepath")
+	flag.StringVar(&_cachePath, "cache", defaultCacheFilename, "cache filepath")
+	flag.Parse()
+
 	loadConf()
 }
 
 func loadConf() {
 	var err error
 	var bytes []byte
-	if bytes, err = ioutil.ReadFile(confFilename); err == nil {
+	if bytes, err = ioutil.ReadFile(_confPath); err == nil {
 		if err = json.Unmarshal(bytes, &_conf); err == nil {
 			_notifiers = []notifier.Notifier{}
 
@@ -53,7 +61,7 @@ func main() {
 	if games, err := extractor.ExtractFreeGames(); err != nil {
 		log.Printf("failed to extract free games: %s", err)
 	} else {
-		if db, err := database.Open(cacheFilename); err != nil {
+		if db, err := database.Open(_cachePath); err != nil {
 			log.Printf("failed to open cache database: %s", err)
 		} else {
 			defer db.Close()
