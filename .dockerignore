@@ -1,0 +1,14 @@
+README.md
+
+go.*
+*.go
+
+extractor/
+database/
+notifier/
+
+Dockerfile
+
+*.db
+*.sample
+

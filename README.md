@@ -29,7 +29,17 @@ $ ./free-epic-games-notifier
 
 ### With Docker
 
-// TODO
+Build image,
+
+```bash
+$ docker build -t MY_IMAGE_TAG .
+```
+
+then run it with:
+
+```bash
+$ docker run -t MY_IMAGE_TAG
+```
 
 ## License
 
