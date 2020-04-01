@@ -1,0 +1,4 @@
+free-epic-games-notifier
+*.swp*
+*.db
+epic_notifier.json

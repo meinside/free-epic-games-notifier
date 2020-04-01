@@ -1,0 +1,4 @@
+{
+	"jandi_webhook_url": "https://webhook_url_to_your_jandi_room",
+	"pushbullet_access_token": "your_pushbullet_access_token"
+}
