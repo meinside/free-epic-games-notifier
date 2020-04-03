@@ -41,6 +41,24 @@ then run it with:
 $ docker run -t -v free-epic-games-caches:/caches MY_IMAGE_TAG
 ```
 
+### Run Periodically
+
+Run periodically with cron:
+
+```bash
+$ crontab -e
+```
+
+then add following:
+
+```
+# run at 12:00 everyday
+0 12 * * * /path/to/free-epic-games-notifier
+
+# run with docker at 12:00 everyday
+0 12 * * * docker run -t -v free-epic-games-caches:/caches MY_IMAGE_TAG
+```
+
 ## License
 
 MIT
