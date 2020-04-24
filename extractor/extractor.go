@@ -38,7 +38,7 @@ func ExtractFreeGames() ([]FreeGame, error) {
 	var imgs []*cdp.Node
 	err := chromedp.Run(runCtx,
 		chromedp.Navigate(storeURL),
-		chromedp.WaitVisible(`div[class^=OfferCardImage]`),
+		chromedp.WaitVisible(`span[class^=OfferTitleInfo-title]`),
 		chromedp.Nodes(`span[class^=OfferTitleInfo-title]`, &titles, chromedp.ByQueryAll),
 		chromedp.Nodes(`span[class^=AvailabilityStatusBar-root]`, &statuses, chromedp.ByQueryAll),
 		chromedp.Nodes(`div[class^=CardGrid-card] > a`, &links, chromedp.ByQueryAll),
