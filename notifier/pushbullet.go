@@ -30,3 +30,16 @@ func (n PushbulletNotifier) Notify(game extractor.FreeGame) (err error) {
 
 	return err
 }
+
+// NotifyError notifies an error
+func (n PushbulletNotifier) NotifyError(e error) (err error) {
+	client := pushbullet.New(n.Token)
+
+	note := requests.NewNote()
+	note.Title = pushbulletTitle
+	note.Body = fmt.Sprintf("Error: %s", err)
+
+	_, err = client.PostPushesNote(note)
+
+	return err
+}

@@ -92,7 +92,7 @@ func filterFreeGames(titles, statuses, links, imgs []*cdp.Node) (games []FreeGam
 	}
 
 	if len(games) <= 0 && err == nil {
-		err = fmt.Errorf("there is no free game for now")
+		err = fmt.Errorf("there is no free game in the store page (%s)", storeURL)
 	}
 
 	return games, err

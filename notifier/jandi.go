@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	incomingWebhookTitle = "Free Epic Games Notification"
-	incomingWebhookColor = "#FF0000"
+	incomingWebhookTitle      = "Free Epic Games Notification"
+	incomingWebhookColor      = "#0000FF"
+	incomingWebhookErrorColor = "#FF0000"
 )
 
 // JandiNotifier struct
@@ -27,6 +28,21 @@ func (n JandiNotifier) Notify(game extractor.FreeGame) (err error) {
 		incomingWebhookColor,
 		[]jandi.ConnectInfo{
 			jandi.ConnectInfoFrom(fmt.Sprintf("Free Now: %s", game.Title), game.StoreURL, game.ImageURL),
+		},
+	)
+
+	return err
+}
+
+// NotifyError notifies an error
+func (n JandiNotifier) NotifyError(e error) (err error) {
+	client := jandi.NewIncomingClient(n.WebhookURL)
+
+	_, err = client.SendIncoming(
+		incomingWebhookTitle,
+		incomingWebhookErrorColor,
+		[]jandi.ConnectInfo{
+			jandi.ConnectInfoFrom(fmt.Sprintf("Error: %s", e), "", ""),
 		},
 	)
 
