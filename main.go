@@ -57,9 +57,35 @@ func loadConf() {
 	}
 }
 
+// notify game
+func notifyGame(game extractor.FreeGame) bool {
+	sent := false
+
+	for _, notifier := range _notifiers {
+		if err := notifier.Notify(game); err == nil {
+			sent = true
+		} else {
+			log.Printf("failed to send notification: %s", err)
+		}
+	}
+
+	return sent
+}
+
+// notify error
+func notifyError(err error) {
+	for _, notifier := range _notifiers {
+		if err := notifier.NotifyError(err); err != nil {
+			log.Printf("failed to send error notification: %s", err)
+		}
+	}
+}
+
 func main() {
 	if games, err := extractor.ExtractFreeGames(); err != nil {
 		log.Printf("failed to extract free games: %s", err)
+
+		notifyError(err)
 	} else {
 		if db, err := database.Open(_cachePath); err != nil {
 			log.Printf("failed to open cache database: %s", err)
@@ -67,18 +93,15 @@ func main() {
 			defer db.Close()
 
 			sentNotification := false
+
 			for _, game := range games {
 				if cached, err := db.IsCachedGame(game.Title); !cached {
-					for _, notifier := range _notifiers {
-						if err := notifier.Notify(game); err == nil {
-							if err := db.CacheGame(game); err != nil {
-								log.Printf("failed to cache free game: %s", err)
-							}
+					if notifyGame(game) {
+						sentNotification = true
+					}
 
-							sentNotification = true
-						} else {
-							log.Printf("failed to send notification: %s", err)
-						}
+					if err := db.CacheGame(game); err != nil {
+						log.Printf("failed to cache free game: %s", err)
 					}
 				} else if err != nil {
 					log.Printf("failed to check if it is cached: %s", err)

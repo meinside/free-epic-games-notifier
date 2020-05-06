@@ -7,4 +7,5 @@ import (
 // Notifier interface
 type Notifier interface {
 	Notify(game extractor.FreeGame) error
+	NotifyError(err error) error
 }
