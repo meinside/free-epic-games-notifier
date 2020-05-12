@@ -10,10 +10,18 @@ import (
 )
 
 const (
+	// urls
 	epicURL  = "https://www.epicgames.com"
 	storeURL = epicURL + "/store/en-US/free-games"
 
+	// status
 	statusFreeNow = "Free Now"
+
+	// css selectors
+	selectorStatus = `div[class^=OfferCard-bodyAndBanner] > div > span`
+	selectorTitle  = `span[class^=OfferTitleInfo-title]`
+	selectorLink   = `div[class^=CardGrid-card] > div > a`
+	selectorImage  = `div[class^=Picture-picture] > img`
 )
 
 // FreeGame is a struct for a free game
@@ -38,11 +46,11 @@ func ExtractFreeGames() ([]FreeGame, error) {
 	var imgs []*cdp.Node
 	err := chromedp.Run(runCtx,
 		chromedp.Navigate(storeURL),
-		chromedp.WaitVisible(`span[class^=AvailabilityStatusBar-root]`),
-		chromedp.Nodes(`span[class^=OfferTitleInfo-title]`, &titles, chromedp.ByQueryAll),
-		chromedp.Nodes(`span[class^=AvailabilityStatusBar-root]`, &statuses, chromedp.ByQueryAll),
-		chromedp.Nodes(`div[class^=CardGrid-card] > a`, &links, chromedp.ByQueryAll),
-		chromedp.Nodes(`div[class^=Picture-picture] > img`, &imgs, chromedp.ByQueryAll),
+		chromedp.WaitVisible(selectorStatus),
+		chromedp.Nodes(selectorTitle, &titles, chromedp.ByQueryAll),
+		chromedp.Nodes(selectorStatus, &statuses, chromedp.ByQueryAll),
+		chromedp.Nodes(selectorLink, &links, chromedp.ByQueryAll),
+		chromedp.Nodes(selectorImage, &imgs, chromedp.ByQueryAll),
 	)
 	if err != nil {
 		return nil, err
@@ -58,7 +66,7 @@ func filterFreeGames(titles, statuses, links, imgs []*cdp.Node) (games []FreeGam
 	// extract values
 	gameTitles := []string{}
 	for _, title := range titles {
-		if title.ChildNodeCount > 0 {
+		if len(title.Children) > 0 {
 			gameTitles = append(gameTitles, title.Children[0].NodeValue)
 		}
 	}
@@ -77,7 +85,7 @@ func filterFreeGames(titles, statuses, links, imgs []*cdp.Node) (games []FreeGam
 			status := s.Children[0].NodeValue
 
 			// filter 'Free Now'
-			if strings.EqualFold(status, statusFreeNow) {
+			if strings.Contains(status, statusFreeNow) {
 				if len(gameTitles) > i && len(gameURLs) > i && len(gameImageURLs) > i {
 					games = append(games, FreeGame{
 						Title:    gameTitles[i],
