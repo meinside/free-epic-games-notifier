@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 
 	"github.com/meinside/free-epic-games-notifier/database"
 	"github.com/meinside/free-epic-games-notifier/extractor"
@@ -14,6 +16,8 @@ import (
 const (
 	defaultConfigFilename = "epic_notifier.json"
 	defaultCacheFilename  = "caches.db"
+
+	timeoutSeconds = 60
 )
 
 type conf struct {
@@ -82,35 +86,53 @@ func notifyError(err error) {
 }
 
 func main() {
-	if games, err := extractor.ExtractFreeGames(); err != nil {
-		log.Printf("failed to extract free games: %s", err)
+	quit := make(chan bool, 1)
 
-		notifyError(err)
-	} else {
-		if db, err := database.Open(_cachePath); err != nil {
-			log.Printf("failed to open cache database: %s", err)
+	go func(quit chan bool) {
+		if games, err := extractor.ExtractFreeGames(); err != nil {
+			log.Printf("failed to extract free games: %s", err)
+
+			notifyError(err)
 		} else {
-			defer db.Close()
+			if db, err := database.Open(_cachePath); err != nil {
+				log.Printf("failed to open cache database: %s", err)
+			} else {
+				defer db.Close()
 
-			sentNotification := false
+				sentNotification := false
 
-			for _, game := range games {
-				if cached, err := db.IsCachedGame(game.Title); !cached {
-					if notifyGame(game) {
-						sentNotification = true
+				for _, game := range games {
+					if cached, err := db.IsCachedGame(game.Title); !cached {
+						if notifyGame(game) {
+							sentNotification = true
+						}
+
+						if err := db.CacheGame(game); err != nil {
+							log.Printf("failed to cache free game: %s", err)
+						}
+					} else if err != nil {
+						log.Printf("failed to check if it is cached: %s", err)
 					}
+				}
 
-					if err := db.CacheGame(game); err != nil {
-						log.Printf("failed to cache free game: %s", err)
-					}
-				} else if err != nil {
-					log.Printf("failed to check if it is cached: %s", err)
+				if !sentNotification {
+					log.Printf("no new games notified")
 				}
 			}
-
-			if !sentNotification {
-				log.Printf("no new games notified")
-			}
 		}
+
+		quit <- true
+	}(quit)
+
+	// wait...
+	select {
+	case <-quit:
+		log.Printf("operation finished")
+		break
+	case <-time.After(timeoutSeconds * time.Second):
+		err := fmt.Errorf("operation timed out: %d seconds", timeoutSeconds)
+		log.Printf("error: %s", err)
+		notifyError(err)
+		break
 	}
 }
