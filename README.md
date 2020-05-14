@@ -59,6 +59,14 @@ then add following:
 0 12 * * * docker run -t -v free-epic-games-caches:/caches MY_IMAGE_TAG
 ```
 
+## Trouble Shooting
+
+### x. Error: operation timed out: n seconds
+
+If the store page has changed and css selector no longer works, it will timeout.
+
+Check the store page's DOM structure, fix the affected selectors, and try again.
+
 ## License
 
 MIT
