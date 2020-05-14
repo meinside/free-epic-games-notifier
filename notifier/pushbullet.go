@@ -37,7 +37,7 @@ func (n PushbulletNotifier) NotifyError(e error) (err error) {
 
 	note := requests.NewNote()
 	note.Title = pushbulletTitle
-	note.Body = fmt.Sprintf("Error: %s", err)
+	note.Body = fmt.Sprintf("Error: %s", e)
 
 	_, err = client.PostPushesNote(note)
 
