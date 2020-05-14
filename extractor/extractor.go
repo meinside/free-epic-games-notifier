@@ -18,7 +18,7 @@ const (
 	statusFreeNow = "Free Now"
 
 	// css selectors
-	selectorStatus = `div[class^=OfferCard-bodyAndBanner] > div > span`
+	selectorStatus = `div[class^=CardGrid-card] > div > a > div > div > div > div > div > div > span`
 	selectorTitle  = `span[class^=OfferTitleInfo-title]`
 	selectorLink   = `div[class^=CardGrid-card] > div > a`
 	selectorImage  = `div[class^=Picture-picture] > img`
