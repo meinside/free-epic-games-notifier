@@ -3,6 +3,7 @@ package extractor
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/chromedp/cdproto/cdp"
@@ -17,11 +18,16 @@ const (
 	// status
 	statusFreeNow = "Free Now"
 
-	// css selectors
-	selectorStatus = `div[class^=CardGrid-card] > div > a > div > div > div > div > div > div > span`
-	selectorTitle  = `span[class^=OfferTitleInfo-title]`
-	selectorLink   = `div[class^=CardGrid-card] > div > a`
-	selectorImage  = `div[class^=Picture-picture] > img`
+	// xpaths and css selectors
+	xpathStatusFreeNow = `//span[contains(text(), 'Free Now')]`
+	selectorStatus     = `div[class^=CardGrid-card] > div > a > div > div > div > div > span`
+	selectorTitle      = `span[class^=OfferTitleInfo-title]`
+	selectorLink       = `div[class^=CardGrid-card] > div > a`
+	selectorImage      = `div[class^=Picture-picture] > img`
+
+	// for debugging
+	_debug = false
+	//_debug = true
 )
 
 // FreeGame is a struct for a free game
@@ -46,7 +52,7 @@ func ExtractFreeGames() ([]FreeGame, error) {
 	var imgs []*cdp.Node
 	err := chromedp.Run(runCtx,
 		chromedp.Navigate(storeURL),
-		chromedp.WaitVisible(selectorStatus),
+		chromedp.WaitVisible(xpathStatusFreeNow, chromedp.BySearch),
 		chromedp.Nodes(selectorTitle, &titles, chromedp.ByQueryAll),
 		chromedp.Nodes(selectorStatus, &statuses, chromedp.ByQueryAll),
 		chromedp.Nodes(selectorLink, &links, chromedp.ByQueryAll),
@@ -79,10 +85,20 @@ func filterFreeGames(titles, statuses, links, imgs []*cdp.Node) (games []FreeGam
 		gameImageURLs = append(gameImageURLs, img.AttributeValue("src"))
 	}
 
+	if _debug {
+		log.Printf("[debug] game titles: %+v", gameTitles)
+		log.Printf("[debug] game links: %+v", gameURLs)
+		log.Printf("[debug] game images: %+v", gameImageURLs)
+	}
+
 	// check game statuses
 	for i, s := range statuses {
 		if s.ChildNodeCount > 0 {
 			status := s.Children[0].NodeValue
+
+			if _debug {
+				log.Printf("[debug] game status[%d]: %s", i, status)
+			}
 
 			// filter 'Free Now'
 			if strings.Contains(status, statusFreeNow) {
