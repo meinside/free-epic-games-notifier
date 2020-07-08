@@ -15,8 +15,8 @@ github.com/mailru/easyjson v0.7.0 h1:aizVhC/NAAcKWb+5QsU1iNOZb4Yws5UO2I+aIprQITM
 github.com/mailru/easyjson v0.7.0/go.mod h1:KAzv3t3aY1NaHWoQz1+4F1ccyAH66Jk7yos7ldAVICs=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible h1:gXHsfypPkaMZrKbD5209QV9jbUTJKjyR5WD3HYQSd+U=
 github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
-github.com/meinside/jandi-webhook-go v0.1.1 h1:rHKRQgQpqQOmIShniF2GLWKuOwuihwc5lbutHox23uU=
-github.com/meinside/jandi-webhook-go v0.1.1/go.mod h1:2Qam9iaLbMzU7KZok7t1F6JnzJuHZy7yfdV/bNnOITE=
+github.com/meinside/jandi-webhook-go v0.2.0 h1:yYa11zUjNj1/M8hYHKGmG+OrY5grHnK21He/NqLHwyY=
+github.com/meinside/jandi-webhook-go v0.2.0/go.mod h1:XJcK9/2GAe+JfG9yK3aKWQwezXanl1CajGAxbaycwOY=
 github.com/mitsuse/pushbullet-go v0.1.0 h1:W9izHOpz8uilRBgbYSnqb+LZK/l8Ad4slRTCBFpItG0=
 github.com/mitsuse/pushbullet-go v0.1.0/go.mod h1:sJ6Y3IROSfSQNLY/8gtYjq4Gs49DFnrxaqxQA6DVgnM=
 golang.org/x/sys v0.0.0-20200116001909-b77594299b42 h1:vEOn+mP2zCOVzKckCZy6YsCtDblrpj/w7B9nxGNELpg=
