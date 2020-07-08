@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	pushbulletTitle = "Free Epic Games Notification"
+	pushbulletTitle = "Free Epic Games"
 )
 
 // PushbulletNotifier struct
