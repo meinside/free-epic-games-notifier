@@ -24,8 +24,9 @@ type JandiNotifier struct {
 func (n JandiNotifier) Notify(game extractor.FreeGame) (err error) {
 	client := jandi.NewIncomingClient(n.WebhookURL)
 
-	_, err = client.SendIncoming(
+	_, err = client.SendIncomingWithTitle(
 		incomingWebhookTitle,
+		incomingWebhookDescription,
 		incomingWebhookColor,
 		[]jandi.ConnectInfo{
 			jandi.ConnectInfoFrom(fmt.Sprintf("Free Now: %s", game.Title), game.StoreURL, game.ImageURL),
