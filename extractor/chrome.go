@@ -20,10 +20,10 @@ const (
 
 	// xpaths and css selectors
 	xpathStatusFreeNow = `//span[contains(text(), 'Free Now')]`
-	selectorStatus     = `div[class^=CardGrid-card] > div > a > div > div > div > div > div > div > span`
-	selectorTitle      = `span[class^=OfferTitleInfo-title]`
-	selectorLink       = `div[class^=CardGrid-card] > div > a`
-	selectorImage      = `div[class^=Picture-picture] > img`
+	selectorStatus     = `div[data-component=StatusBar] > span[data-component=Message]`
+	selectorTitle      = `div > span[data-testid=offer-title-info-title][data-component=OfferTitleInfo]`
+	selectorLink       = `div[data-component=CardGridDesktopBase] > div > div > a`
+	selectorImage      = `div[data-component=OfferCardImagePortrait] > div[data-component=Picture] > img`
 
 	// for debugging
 	_debug = false
