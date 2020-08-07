@@ -23,7 +23,7 @@ const (
 	selectorStatus     = `div[data-component=StatusBar] > span[data-component=Message]`
 	selectorTitle      = `div > span[data-testid=offer-title-info-title][data-component=OfferTitleInfo]`
 	selectorLink       = `div[data-component=CardGridDesktopBase] > div > div > a`
-	selectorImage      = `div[data-component=OfferCardImagePortrait] > div[data-component=Picture] > img`
+	selectorImage      = `div[data-component^=OfferCardImage] > div[data-component=Picture] > img`
 
 	// for debugging
 	_debug = false
