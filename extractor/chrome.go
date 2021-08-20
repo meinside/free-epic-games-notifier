@@ -21,7 +21,7 @@ const (
 	// xpaths and css selectors
 	xpathStatusFreeNow = `//span[contains(text(), 'Free Now')]`
 	selectorStatus     = `div[data-component=StatusBar] > span[data-component=Message]`
-	selectorTitle      = `div > span[data-testid=offer-title-info-title][data-component=OfferTitleInfo]`
+	selectorTitle      = `div > span[data-testid=offer-title-info-title][data-component=OfferTitleInfo] > div`
 	selectorLink       = `div[data-component=CardGridDesktopBase] > div > div > a`
 	selectorImage      = `div[data-component^=OfferCardImage] > div[data-component=Picture] > img`
 
